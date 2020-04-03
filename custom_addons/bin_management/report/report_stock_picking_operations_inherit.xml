@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <template id="report_picking_operations_inherit" inherit_id="stock.report_picking">
+            <xpath expr="//div[@class='page']/table[1]/thead/tr/th[1]" position="after">
+                <th>
+                    <strong>Bin Locations</strong>
+                </th>
+            </xpath>
+            <xpath expr="//div[@class='page']/table[1]/tbody/t/t/tr/td[1]" position="after">
+                <td>
+                    <t t-set="bin_len" t-value="len(ml.product_id.product_bin_location_ids)"/>
+                    <t t-foreach="ml.product_id.product_bin_location_ids" t-as="pbin">
+                        <span t-field="pbin.bin_name"/>
+                        <t t-if="pbin_index &lt; bin_len - 1">
+                            <span>,</span>
+                        </t>
+                    </t>
+                </td>
+            </xpath>
+        </template>
+    </data>
+</odoo>
