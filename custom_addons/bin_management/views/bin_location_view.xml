@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+		<!-- Form view for object bin.location-->
+		<record id="bin_location_view_form" model="ir.ui.view">
+			<field name="name">bin.location.form</field>
+			<field name="model">bin.location</field>
+			<field name="type">form</field>
+			<field name="arch" type="xml">
+				<form string="Bin Location">
+					<sheet>
+						<group>
+							<group>
+								<field name="bin_name" />
+							</group>
+						</group>
+					</sheet>
+				</form>
+			</field>
+		</record>
+
+		<!-- Tree view for object bin.location-->
+		<record id="bin_location_view_tree" model="ir.ui.view">
+			<field name="name">bin.location.tree</field>
+			<field name="model">bin.location</field>
+			<field name="type">tree</field>
+			<field name="arch" type="xml">
+				<tree string="Bin Location" editable="top">
+					<field name="bin_name" />
+				</tree>
+			</field>
+		</record>
+
+		<!-- Action for object bin.location-->
+		<record id="action_bin_location" model="ir.actions.act_window">
+			<field name="name">Bin Location</field>
+			<field name="res_model">bin.location</field>
+			<field name="view_mode">tree,form</field>
+		</record>
+
+		<menuitem id="menu_bin_location" name="Bin Locations" parent="stock.menu_warehouse_config" action="action_bin_location" sequence="3"/>
+
+</odoo>
