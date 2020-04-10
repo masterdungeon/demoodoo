@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Copyright (c) 2017-Present Webkul Software Pvt. Ltd. (<https://webkul.com/>) -->
+<!-- See LICENSE file for full copyright and licensing details. -->
+<!-- "License URL : <https://store.webkul.com/license.html/>" -->
+<odoo>
+    <record id="view_order_form_inherit_custom_options" model="ir.ui.view">
+        <field name="name">sale.order.form.inherit</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="sale.view_order_form" />
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='order_line']/tree/field[@name='product_id']" position="after">
+                <field name="is_custom_product" invisible="1"/>
+                <button name="configure_product" string="Configure" 
+                    type="object" class="btn-primary" attrs="{'invisible':['|',('is_custom_product','=',False),('state', 'not in', ['draft', 'sent','sale'])]}"/>
+                <button name="configure_product" string="View" 
+                    type="object" class="btn-primary" attrs="{'invisible':['|',('is_custom_product','=',False),('state', 'not in', ['done','cancel'])]}"/>
+            </xpath>
+            <xpath expr="//field[@name='order_line']/form//field[@name='product_id']" position="after">
+                <field name="is_custom_product" invisible="1"/>
+                <br/>
+            </xpath>
+            <xpath expr="//field[@name='order_line']/form/group" position="before">
+                <header>
+                    <button name="configure_product" string="Configure" 
+                        type="object" class="btn-primary oe_read_only" attrs="{'invisible':[('is_custom_product','=',False)]}"/>
+                </header>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="sale_order_line_custom_options_form" model="ir.ui.view">
+        <field name="name">sale.order.line.custom.options.form</field>
+        <field name="model">sale.order.line</field>
+        <field name="arch" type="xml">
+            <form>
+                <field name="state" invisible="1" />
+                <field name="qty_invoiced" invisible="1" />
+                <header>
+                    <button name="add_option" string="Add Option" type="object" class="btn-primary" attrs="{'invisible':['|',('state','in',['cancel','done']),('qty_invoiced', '&gt;', 0)]}"/>
+                </header>
+                <group>
+                    <field name="sale_options_price" readonly="1"/>
+                </group>
+                <field name="sale_options_ids" readonly="1"/>
+                <footer>
+                    <button name="save_option" string="Save" type="object" class="btn-primary" attrs="{'invisible':[('state','in',['cancel','done'])]}" />
+                    <button name="cancel" special="cancel" string="Close" type="object" />
+                </footer>
+            </form>
+        </field>
+    </record>
+
+</odoo>

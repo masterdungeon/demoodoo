@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="product_variant_easy_edit_dimension_view" model="ir.ui.view">
+        <field name="name">product.variant.easy.edit.dimension.view</field>
+        <field name="model">product.product</field>
+        <field name="inherit_id" ref="product.product_variant_easy_edit_view"/>
+        <field name="arch" type="xml">
+            <xpath expr="//group[@name='weight']" position="inside">
+                <group></group>
+                <group>
+                    <field name="length"/>
+                    <field name="width"/>
+                    <field name="height"/>                
+                </group>
+            </xpath>
+        </field>
+    </record>
+</odoo>

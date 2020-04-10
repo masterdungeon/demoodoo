@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="product_template_form_view" model="ir.ui.view">
+            <field name="name">product.template.form</field>
+            <field name="model">product.template</field>
+            <field name="inherit_id" ref="product.product_template_only_form_view" />
+            <field name="arch" type="xml">
+                <field name="type" position="after">
+                    <field name="nutrition" string="Nutrition" />
+                </field>
+                <page name="general_information" position="inside">
+                    <div id="template_nutrition" attrs="{'invisible': ['|', ('nutrition', '!=', True), ('product_variant_count', '>', 1)]}">
+                        <group string="Nutrition Data">
+                            <group string="Product Information">
+                                <field name="country_of_origin" string="Country Of Orign" />
+                                <field name="directions_of_use" string="Directions of Use and Storage" />
+                                <field name="ingredients" string="Ingredients" />
+                                <field name="allergen_info" string="Allergen Information" />
+                                <field name="servings_per_package" string="Servings Per Package" />
+                                <field name="serving_size" string="Serving Size" />
+                            </group>
+                            <group string="Nutrition Facts Per Serving">
+                                <field name="energy_per_serve" string="Energy Per Serve (kJ)" />
+                                <field name="protein_per_serve" string="Protein Per Serve (g)" />
+                                <field name="fat_per_serve" string="Fat Per Serve (g)" />
+                                <field name="saturated_per_serve" string="Saturated Fat Per Serve (g)" />
+                                <field name="carbohydrate_per_serve" string="Carbohydrate Per Serve (g)" />
+                                <field name="sugar_per_serve" string="Sugar Per Serve (g)" />
+                                <field name="sodium_per_serve" string="Sodium Per Serve (g)" />
+                            </group>
+                        </group>
+                        <group>
+                            <group string="Nutrition Facts Per 100g">
+                                <field name="energy_per_100g" string="Energy Per 100g (kJ)" />
+                                <field name="protein_per_100g" string="Protein Per 100g (g)" />
+                                <field name="fat_per_100g" string="Fat Per 100g (g)" />
+                                <field name="saturated_per_100g" string="Saturated Fat Per 100g (g)" />
+                                <field name="carbohydrate_per_100g" string="Carbohydrate Per 100g (g)" />
+                                <field name="sugar_per_100g" string="Sugar Per 100g (g)" />
+                                <field name="sodium_per_100g" string="Sodium Per 100g (g)" />
+                            </group>
+                        </group>
+                    </div>
+                    <div attrs="{'invisible': ['|', ('nutrition',  '!=', True), '&amp;', ('nutrition', '=', True), ('product_variant_count', '&lt;=', 1)]}">
+                        <h2 style="color: red">Please configure the nutrition facts on the corresponding variants!</h2>
+                    </div>
+                </page>
+            </field>
+        </record>
+        <record id="product_product_form_view" model="ir.ui.view">
+            <field name="name">product.product.form</field>
+            <field name="model">product.product</field>
+            <field name="inherit_id" ref="product.product_normal_form_view" />
+            <field name="arch" type="xml">
+                <field name="type" position="after">
+                    <field name="nutrition" string="Nutrition" />
+                </field>
+                <page name="general_information" position="inside">
+                    <div id="product_nutrition" attrs="{'invisible': [('nutrition', '!=', True)]}">
+                        <group string="Nutrition Facts">
+                            <group string="Nutrition Information">
+                                <field name="country_of_origin" string="Country Of Orign" />
+                                <field name="directions_of_use" string="Directions of Use and Storage" />
+                                <field name="ingredients" string="Ingredients" />
+                                <field name="allergen_info" string="Allergen Information" />
+                                <field name="servings_per_package" string="Servings Per Package" />
+                                <field name="serving_size" string="Serving Size" />
+                            </group>
+                            <group string="Nutrition Facts Per Serving">
+                                <field name="energy_per_serve" string="Energy Per Serve (kJ)" />
+                                <field name="protein_per_serve" string="Protein Per Serve (g)" />
+                                <field name="fat_per_serve" string="Fat Per Serve (g)" />
+                                <field name="saturated_per_serve" string="Saturated Fat Per Serve (g)" />
+                                <field name="carbohydrate_per_serve" string="Carbohydrate Per Serve (g)" />
+                                <field name="sugar_per_serve" string="Sugar Per Serve (g)" />
+                                <field name="sodium_per_serve" string="Sodium Per Serve (g)" />
+                            </group>
+                        </group>
+                        <group>
+                            <group string="Nutrition Facts Per 100g">
+                                <field name="energy_per_100g" string="Energy Per 100g (kJ)" />
+                                <field name="protein_per_100g" string="Protein Per 100g (g)" />
+                                <field name="fat_per_100g" string="Fat Per 100g (g)" />
+                                <field name="saturated_per_100g" string="Saturated Fat Per 100g (g)" />
+                                <field name="carbohydrate_per_100g" string="Carbohydrate Per 100g (g)" />
+                                <field name="sugar_per_100g" string="Sugar Per 100g (g)" />
+                                <field name="sodium_per_100g" string="Sodium Per 100g (g)" />
+                            </group>
+                        </group>
+                    </div>
+                </page>
+            </field>
+        </record>
+    </data>
+</odoo>

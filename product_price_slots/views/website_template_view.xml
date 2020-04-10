@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Copyright (c) 2016-Present Webkul Software Pvt. Ltd. (<https://webkul.com/>) -->
+<!-- See LICENSE file for full copyright and licensing details. -->
+<!-- License URL : https://store.webkul.com/license.html/ -->
+
+<odoo>
+	<data>
+		<template id="assets_frontend" inherit_id="website.assets_frontend" name="Assets Price Slot">
+			<xpath expr="." position="inside">
+			    <script src="/product_price_slots/static/src/js/product_price_slot.js" type="text/javascript"></script>
+		    </xpath>
+		</template>
+
+		<template id="mp_sold_by_detail_in_product" inherit_id="website_sale.product_price" active="True" name="Seller Details On Product Page">
+			<xpath expr="///div[@itemprop='offers']" position="after">
+				<div class="wk_product_slot_loading mt8 hidden" style="background-color:#c4c4c8;width:100%;text-align: center;padding:10px;">
+					<i class="fa fa-spinner fa-pulse fa-2x fa-fw margin-bottom" style="vertical-align: middle;"/>
+					<span> Loading offers</span>
+				</div>
+				<span class="wk_product_offer_slot">
+					<t t-call="product_price_slots.wk_product_price_offer">
+						<span t-if="len(product.product_variant_ids) == 1" class="wk_product_id" t-set="wk_product_id" t-value="product.product_variant_id.id"/>
+					</t>
+				</span>
+				<div id="show_subtotal"  class="decimal_precision" t-att-data-precision="2"></div>
+			</xpath>
+		</template>
+
+		<!-- this template required pricelist.items obj as pli-->
+		<template id="wk_product_price_offer" name="Product Price Slot">
+			<t t-set="wk_pricelist" t-value="website.get_current_pricelist()"/>
+			<t t-set="wk_child_categ" t-value="website.get_all_child_category(product)"/>
+			<t t-set="is_eligible" t-value="website.check_partner_country_eligiblity_for_pricelist(request.env.user.partner_id, wk_pricelist)"/>
+			<t t-if="wk_product_id">
+				<span class="wk_product_id hidden">
+					<t t-esc="wk_product_id"/>
+				</span>
+			</t>
+			<t t-if="not wk_product_id">
+				<span class="wk_product_id hidden"></span>
+			</t>
+			<t t-if="is_eligible and wk_product_id">
+				<t t-set="pli_obj_list" t-value="website.get_pli_for_product(wk_pricelist, product, wk_product_id)"/>
+				<t t-if="pli_obj_list">
+					<div class="alert alert-info mb0" style="padding: 5px;">
+						<span style="font-size: 20px;">
+							<i class="fa fa-tags" aria-hidden="true"></i>
+							<t t-esc="len(pli_obj_list)"/>
+							<t t-if="len(pli_obj_list) > 1">
+								Offers
+							</t>
+							<t t-if="len(pli_obj_list) == 1">
+								Offer
+							</t>
+						</span>
+					</div>
+					<div class="col-md-12" style="padding:0px;">
+						<table class="table table-hover mt36">
+							<thead>
+								<tr class="">
+									<th name="header_qty" style="text-transform: uppercase;">Min Qty</th>
+									<th name="header_price" style="text-transform: uppercase;">Unit Price</th>
+								</tr>
+							</thead>
+							<t t-foreach="pli_obj_list" t-as="pli">
+								<t t-set="min_quantity" t-value="pli.min_quantity if pli.min_quantity > 0 else 1"/>
+								<t t-set="wk_weight" t-value="request.env['product.product'].browse(wk_product_id).weight"/>
+								<t t-set="wk_website_public_price" t-value="request.env['product.product'].browse(wk_product_id).website_public_price"/>
+								<t t-set="wk_website_price" t-value="request.env['product.product'].with_context({'quantity': min_quantity}).browse(wk_product_id).website_price / min_quantity"/>
+								<t t-set="wk_saving" t-value="round((1-(wk_website_price/wk_website_public_price))*100)"/>
+								<t t-set="wk_show_price_per_100g" t-value="request.env['product.product'].browse(wk_product_id).show_price_per_100g"/>
+								
+								<tr>
+									<input type="hidden" class="" name="min_qty" t-att-value="min_quantity"/>
+									<td>
+										<b><t t-esc="min_quantity"/> x </b><t t-esc="request.env['product.product'].browse(wk_product_id).attribute_value_ids.filtered(lambda a: a.attribute_id.id == 23).name"/><t t-if="pli.min_quantity > 1">s</t>
+									</td>
+									<td>
+										<span class="decimal_precision" t-att-data-precision="str(wk_pricelist.currency_id.decimal_places)">
+											<!-- t-attf-class="{{'text-danger' if wk_website_price != wk_website_public_price else ''}}" -->
+											<span style="font-weight:600;" t-esc="wk_website_price" t-options="{'widget': 'monetary', 'display_currency': wk_pricelist.currency_id,}"/>
+											<t t-if="wk_show_price_per_100g and wk_weight > 0">
+												<span class="decimal_precision" t-att-data-precision="str(wk_pricelist.currency_id.decimal_places)">
+													<span style="padding-left:10px;">(<t t-esc="(wk_website_price / wk_weight) / 10" t-options="{'widget': 'monetary', 'display_currency': wk_pricelist.currency_id,}"/> / 100g)</span>
+												</span>
+											</t>
+											<t t-if="not wk_show_price_per_100g and wk_saving > 0">
+												<span class="text-danger" style="padding-left:10px;">Save <t t-esc="wk_saving"/>%</span>
+											</t>
+										</span>
+									</td>
+									
+									<t t-if="pli.date_end">
+										<td>
+											<span style="font-weight:600;">until: </span>
+											<span t-field="pli.date_end" t-options="{'format': 'dd-MMM-yy'}" style="display: inline-block;"/>
+										</td>
+									</t>
+								</tr>
+							</t>
+						</table>
+						<hr style="margin-bottom:10px;"/>
+					</div>
+				</t>
+			</t>
+		</template>
+
+	</data>
+</odoo>
+
+
+
+    
