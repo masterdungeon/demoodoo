@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<templates>
+
+    <t t-name="product_price_slots.product_show_subtotal">
+        <t t-set="wk_website_public_price" t-value="request.env['product.product'].browse(product_id).website_public_price"/>
+		<t t-set="wk_website_price" t-value="request.env['product.product'].with_context({'quantity': add_qty}).browse(product_id).website_price"/>
+		<span class="decimal_precision" t-att-data-precision="2">
+            Normal Price<t t-esc="wk_website_public_price" /> Your price:<t t-esc="wk_website_price" /> !!
+        </span>
+    </t>
+
+</templates>

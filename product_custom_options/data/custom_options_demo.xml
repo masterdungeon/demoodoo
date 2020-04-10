@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Copyright (c) 2017-Present Webkul Software Pvt. Ltd. (<https://webkul.com/>) -->
+<!-- See LICENSE file for full copyright and licensing details. -->
+<!-- "License URL : <https://store.webkul.com/license.html/>" -->
+<odoo>
+    <data noupdate="1">
+        <record id="custom_options_product_tmpl_1" model="product.template" context="{'create_product_product': True}">
+            <field name="name">Bottle</field>
+            <field name="categ_id" ref="product.product_category_5"/>
+            <field name="standard_price">8.0</field>
+            <field name="list_price">10.0</field>
+            <field name="type">consu</field>
+            <field name="uom_id" ref="product.product_uom_unit"/>
+            <field name="uom_po_id" ref="product.product_uom_unit"/>
+            <field name="default_code">BOTTLE</field>
+            <field name='weight'>0.300</field>
+            <field name="image" type="base64" file="product_custom_options/static/img/custom_options_product_1-image.jpg"/>
+        </record>
+        <record id="custom_options_product_1" model="product.product">
+            <field name="default_code">BOTTLE</field>
+            <field name="product_tmpl_id" ref="custom_options_product_tmpl_1"/>
+        </record>
+
+        <record id="custom_options_1" model="product.custom.options">
+            <field name="name">Color</field>
+            <field name="input_type">radio</field>
+            <field name="prod_tmpl_id" ref="custom_options_product_tmpl_1"/>
+        </record>
+
+        <record id="custom_options_1_value_1" model="product.custom.options.value">
+            <field name="name">Blue</field>
+            <field name="price">1</field>
+            <field name="custom_option_id" ref="custom_options_1"/>
+        </record>
+
+        <record id="custom_options_1_value_2" model="product.custom.options.value">
+            <field name="name">Red</field>
+            <field name="price">2</field>
+            <field name="custom_option_id" ref="custom_options_1"/>
+        </record>
+
+        <record id="custom_options_1_value_3" model="product.custom.options.value">
+            <field name="name">Green</field>
+            <field name="price">3</field>
+            <field name="custom_option_id" ref="custom_options_1"/>
+        </record>
+
+        <record id="custom_options_1_value_4" model="product.custom.options.value">
+            <field name="name">No Choice</field>
+            <field name="price">0</field>
+            <field name="custom_option_id" ref="custom_options_1"/>
+        </record>
+
+
+        <record id="custom_options_sale_order_1" model="sale.order">
+            <field name="partner_id" ref="base.res_partner_2"/>
+            <field name="partner_invoice_id" ref="base.res_partner_2"/>
+            <field name="partner_shipping_id" ref="base.res_partner_2"/>
+            <field name="user_id" ref="base.user_demo"/>
+            <field name="pricelist_id" ref="product.list0"/>
+            <field name="team_id" ref="sales_team.team_sales_department"/>
+            <field name="date_order" eval="(DateTime.today() + relativedelta(minutes=1)).strftime('%Y-%m-%d %H:%M')"/>
+        </record>
+
+
+        <record id="custom_options_sale_order_line_1" model="sale.order.line">
+            <field name="order_id" ref="custom_options_sale_order_1"/>
+            <field name="name">Bottle</field>
+            <field name="product_id" ref="custom_options_product_1"/>
+            <field name="product_uom_qty">3</field>
+            <field name="product_uom" ref="product.product_uom_unit"/>
+            <field name="price_unit">100.00</field>
+            <field name="is_custom_product" eval="True"/>
+        </record>
+
+        <record id="sale_custom_options_1" model="sale.custom.options">
+            <field name="custom_option_id" ref="custom_options_1"/>
+            <field name="order_line_id" ref="custom_options_sale_order_line_1"/>
+            <field name="price">3</field>
+            <field name="input_data">Green</field>
+        </record>
+
+        <function model="sale.order.line" name="save_option" eval="[[ref('custom_options_sale_order_line_1')]]"/>
+
+    </data>
+</odoo>

@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Copyright (c) 2017-Present Webkul Software Pvt. Ltd. (<https://webkul.com/>) -->
+<!-- See LICENSE file for full copyright and licensing details. -->
+<!-- "License URL : <https://store.webkul.com/license.html/>" -->
+<odoo>
+    <record id="sale_option_selection_wizard_form" model="ir.ui.view">
+        <field name="name">sale.option.selection.wizard.form</field>
+        <field name="model">sale.option.selection.wizard</field>
+        <field name="arch" type="xml">
+            <form>
+                <group>
+                    <group>
+                        <field name="prod_tmpl_id" readonly="1" invisible="1"/>
+                        <field name="input_type" readonly="1" invisible="1"/>
+                        <field name="custom_option_id" domain="[('prod_tmpl_id', '=', prod_tmpl_id)]"/>
+
+                        <field name="text_input" attrs="{'invisible':[('input_type','!=','field')],'on_change': 'add_option'}"/>
+                        <field name="area_input" attrs="{'invisible':[('input_type','!=','area')]}"/>
+                        <field name="date_input" attrs="{'invisible':[('input_type','!=','date')]}"/>
+                        <field name="datetime_input" attrs="{'invisible':[('input_type','!=','date_time')]}"/>
+                        <field name="file_input" attrs="{'invisible':[('input_type','!=','file')]}"/>
+                        <field name="radio_input" widget="radio"
+                            attrs="{'invisible':[('input_type','!=','radio')]}"
+                            domain="[('custom_option_id', '=', custom_option_id)]"/>
+                        <field name="dropdown_input"
+                            attrs="{'invisible':[('input_type','!=','drop_down')]}"
+                            domain="[('custom_option_id', '=', custom_option_id)]"/>
+                        <field name="multi_input" widget="many2many_tags"
+                            attrs="{'invisible':[('input_type','!=','multiple')]}" 
+                            domain="[('custom_option_id', '=', custom_option_id)]"/>
+                        <field name="checkbox_input" 
+                            attrs="{'invisible':[('input_type','!=','checkbox')]}" 
+                            domain="[('custom_option_id', '=', custom_option_id)]"/>
+                    </group>
+                    <group>
+                    </group>
+                </group>
+                <footer>
+                    <button name="add_option" string="Add Option" type="object" class="btn-primary" />
+                    <button name="cancel_action" string="Cancel" type="object" />
+                </footer>
+            </form>
+        </field>
+    </record>
+</odoo>

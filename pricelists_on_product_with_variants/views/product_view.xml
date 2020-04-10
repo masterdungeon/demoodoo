@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="product_template_form_view_inherit" model="ir.ui.view">
+            <field name="name">product.template.inherit.form</field>
+            <field name="model">product.template</field>
+            <field name="inherit_id" ref="product.product_template_form_view"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='item_ids']" position="replace">
+                    <field name="item_ids" nolabel="1"
+                           context="{'show_price_list':True,'default_product_tmpl_id':active_id,'default_base':'list_price', 'default_applied_on' :'1_product'}">
+                        <tree string="Pricelist Items">
+                            <field name="pricelist_id" string="Pricelist" required='1'/>
+                            <field name="product_tmpl_id" options="{'no_create_edit': True, 'no_open': True}"/>
+                            <field name="product_id" options="{'no_create_edit': True, 'no_open': True}"
+                                   attrs="{'column_invisible': [('parent.product_variant_count', '=', 1)]}"/>
+                            <field name="fixed_price" string="Price" required='1'/>
+                            <field name="min_quantity"/>
+                            <field name="date_start"/>
+                            <field name="date_end"/>
+                            <field name="applied_on" invisible="1"/>
+                            <field name="product_list" invisible="1"/>
+                        </tree>
+                    </field>
+                </xpath>
+            </field>
+        </record>
+
+
+        <record id="product_pricelist_item_form_view_inherit" model="ir.ui.view">
+            <field name="name">product.pricelist.item.inherit.form</field>
+            <field name="model">product.pricelist.item</field>
+            <field name="inherit_id" ref="product.product_pricelist_item_form_view"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='applied_on']" position="replace">
+                    <field name="is_product_list" invisible="1"/>
+                    <field name="is_price_list_required" invisible="1"/>
+                    <field name="applied_on" widget="radio" />
+                    <field name="pricelist_id" string="Pricelist"
+                           attrs="{'required':[('is_price_list_required', '=', True)]}"
+                           invisible="not context.get('show_price_list', False)"/>
+                </xpath>
+
+                <xpath expr="//field[@name='product_tmpl_id']" position="replace">
+                    <field name="product_tmpl_id" options="{'no_create_edit': True, 'no_open': True}"
+                           attrs="{'invisible':[('applied_on', '!=', '1_product')],'required':[('applied_on', '=', '1_product')]}"
+                           string="Product"/>
+                </xpath>
+
+                <xpath expr="//field[@name='product_id']" position="replace">
+                    <field name="product_list" invisible="1"/>
+                    <field name="product_id" options="{'no_create_edit': True, 'no_open': True}"
+                           attrs="{'invisible':[('applied_on', '!=', '0_product_variant')],'required':[('applied_on', '=', '0_product_variant')]}"
+                           string="Product Variant"/>
+                </xpath>
+            </field>
+        </record>
+
+    </data>
+</odoo>
